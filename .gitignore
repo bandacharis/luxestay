@@ -1,0 +1,7 @@
+.env
+ServiceAccountKey.json
+*serviceAccount*.json
+.venv/
+__pycache__/
+.idea/
+*.pyc
