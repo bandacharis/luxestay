@@ -1,24 +1,207 @@
 # LuxeStay — Bali Retreat
-Flask REST API, HTML/CSS/JavaScript, Firebase Cloud Firestore. Python 3.11+ recommended.
 
-## Setup (Windows PowerShell)
-1. Create a Firebase project and enable Cloud Firestore in production mode.
-2. Project settings > Service accounts > Generate new private key. Save it locally as `ServiceAccountKey.json`. Never commit it.
-3. Copy `.env.example` to `.env` if missing. Set the credential path.
-4. Run `py -m venv .venv`, then `.\.venv\Scripts\python.exe -m pip install -r requirements.txt`, then `.\.venv\Scripts\python.exe app.py`.
-5. Open http://127.0.0.1:5000 and check http://127.0.0.1:5000/api/health.
+## Hotel Reservation and Management System
 
-## Database
-Rooms and guests are referenced by document ID in reservations. The first successful insert creates each collection. `_system/write_guard` is an internal transaction serialization document. Do not edit data directly while using the app. All writes use Flask and the Admin SDK. Room status is operational; booked status is derived from active reservations for today's date. Pending, Confirmed and Checked-in reservations block overlapping dates; checkout is exclusive. Existing reservation rates are preserved unless the room changes. Payments are status records, not payment processing. Amenities are stored as text. Photos are illustrative external images and require internet access; fonts have fallbacks.
+LuxeStay is a modern, cloud-based hotel reservation and management system designed to simplify room management, guest registration, reservation tracking, check-in and check-out operations, and payment status monitoring. It features a tropical Bali Retreat-inspired interface integrated with Firebase Cloud Firestore for persistent database storage.
 
-## Security
-Use Firestore rules `rules_version = '2'; service cloud.firestore { match /databases/{database}/documents { match /{document=**} { allow read, write: if false; } } }` for direct client access. Admin SDK bypasses rules and uses IAM. This is a local single-operator classroom app, not an authenticated public hotel service. Do not expose it publicly or enter real guest personal data without adding authentication and authorization.
+## Live Website
 
-## API
-GET/POST `/api/rooms`, `/api/guests`, `/api/reservations`; GET/PUT/DELETE `/api/<collection>/<id>`. List GET accepts `q` and `status`. UI also filters locally. `/api/health` checks Firestore.
+**Vercel Deployment:** https://luxestay-chariz1.vercel.app/
 
-## Manual verification
-Create a room and guest, then a reservation. Verify totals, view, edit, search, and refresh. Attempt an overlapping reservation and confirm rejection. Attempt deleting a linked room and confirm rejection. Delete reservation, then room and guest. Verify documents in Firebase console. Test invalid dates, capacity and missing IDs. Check-in/out and payment pages use reservation editing. No seed data is inserted.
+## Technologies Used
 
-## Submission
-Create a private GitHub repository, invite `kidlat14`, push source and README, excluding credentials and `.env`. Submit before December 7, 2026 (December 6 or earlier for full timeliness points).
+- Python Flask
+- HTML5
+- CSS3
+- JavaScript
+- Firebase Cloud Firestore
+- Firebase Admin SDK
+- Python-dotenv
+- PyCharm
+- GitHub
+- Vercel
+
+## System Features
+
+- Interactive hotel management dashboard
+- Room management
+- Guest information management
+- Reservation management
+- Check-in and check-out management
+- Payment status monitoring
+- Create, Read, Update, and Delete (CRUD) operations
+- Search and filtering
+- Individual record viewing
+- Automatic reservation cost calculation
+- Double-booking prevention
+- Input validation
+- Cloud database integration
+- Responsive Bali Retreat-inspired interface
+
+## Database Collections
+
+The system uses three interconnected Firebase Cloud Firestore collections.
+
+| Collection | Description |
+|---|---|
+| `rooms` | Stores hotel room information, capacity, rates, amenities, and operational status. |
+| `guests` | Stores guest information and contact details. |
+| `reservations` | Stores booking details, room and guest references, reservation dates, costs, and payment status. |
+
+The system also uses `_system/write_guard` as an internal transaction serialization document to help prevent conflicting reservations.
+
+Rooms and guests are referenced by their Firestore document IDs. Collections are automatically created upon the first successful data insertion.
+
+## Project Structure
+
+- `app.py` — Flask application and REST API
+- `firebase_config.py` — Firebase connection configuration
+- `templates/index.html` — Main website interface
+- `static/css/style.css` — Website styling and layout
+- `static/js/app.js` — Frontend functionality and API integration
+- `requirements.txt` — Python dependencies
+- `.env.example` — Environment configuration template
+- `.gitignore` — Excluded files and credentials
+- `README.md` — Project documentation
+
+## Local Installation and Setup
+
+### 1. Firebase Configuration
+
+Create a Firebase project and enable Cloud Firestore in production mode.
+
+Navigate to Project Settings → Service Accounts → Generate New Private Key.
+
+Save the downloaded file locally as `ServiceAccountKey.json`.
+
+### 2. Environment Configuration
+
+Create a `.env` file containing:
+
+`GOOGLE_APPLICATION_CREDENTIALS=ServiceAccountKey.json`
+
+`FLASK_DEBUG=false`
+
+### 3. Install Dependencies
+
+Open the project in PyCharm and run the following commands in Windows PowerShell:
+
+`py -m venv .venv`
+
+`.\.venv\Scripts\python.exe -m pip install -r requirements.txt`
+
+### 4. Run the Application
+
+`.\.venv\Scripts\python.exe app.py`
+
+Open the local website:
+
+http://127.0.0.1:5000/
+
+### 5. Verify Firestore Connection
+
+http://127.0.0.1:5000/api/health
+
+## Vercel Deployment
+
+The application is deployed using Vercel for online accessibility.
+
+**Deployment URL:** https://luxestay-chariz1.vercel.app/
+
+Firebase authentication is configured through the Vercel environment variable `FIREBASE_SERVICE_ACCOUNT`, which contains the Firebase service account JSON credentials.
+
+The application supports both local Firebase credential files and Vercel environment variables.
+
+To check the deployed database connection, visit:
+
+https://luxestay-chariz1.vercel.app/api/health
+
+## REST API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/health` | Check database connectivity |
+| GET | `/api/rooms` | Retrieve room records |
+| GET | `/api/guests` | Retrieve guest records |
+| GET | `/api/reservations` | Retrieve reservation records |
+| POST | `/api/<collection>` | Create a record |
+| GET | `/api/<collection>/<id>` | View a specific record |
+| PUT | `/api/<collection>/<id>` | Update a record |
+| DELETE | `/api/<collection>/<id>` | Delete a record |
+
+List endpoints support search and status filtering.
+
+## Business Rules and Validation
+
+- Reservations require valid room and guest references.
+- Overlapping active reservations are prevented.
+- Check-out dates must be later than check-in dates.
+- Pending, Confirmed, and Checked-in reservations block overlapping bookings.
+- Room capacity and reservation details are validated.
+- Existing reservation rates are preserved unless the assigned room changes.
+- Linked rooms and guests cannot be deleted while referenced by reservations.
+- Payment records represent payment status only and do not process actual financial transactions.
+
+## Security and Privacy
+
+Firebase credentials are securely managed through local environment files or Vercel Environment Variables.
+
+The following files must never be uploaded to GitHub:
+
+- `ServiceAccountKey.json`
+- `.env`
+- `.venv/`
+- `__pycache__/`
+- `.idea/`
+
+Firestore security rules should deny direct client access. Database operations are performed through the Flask backend using the Firebase Admin SDK.
+
+This application is intended for academic demonstration purposes. The deployed version does not include complete user authentication and authorization. Use fictional guest records only. Production use requires additional security measures.
+
+## System Testing
+
+The following operations should be verified:
+
+- Firebase database connectivity
+- Creating, viewing, updating, and deleting records
+- Room and guest references
+- Reservation cost calculations
+- Double-booking prevention
+- Search and filtering
+- Input validation
+- Linked-record deletion restrictions
+- Data persistence after refreshing the website
+- Local and Vercel application functionality
+
+## Project Limitations
+
+- Requires an internet connection for Firebase Cloud Firestore.
+- External hotel images require internet access.
+- Does not support actual online payment processing.
+- Does not include complete production-level authentication.
+- No automatic seed data is inserted by default.
+
+## Academic Purpose
+
+This project was developed as a final practical activity for the Advanced Database subject to demonstrate cloud database integration, interconnected collections, REST API development, CRUD operations, data validation, and web application deployment.
+
+## Submission Requirements
+
+- Private GitHub repository
+- Complete project source code
+- Firebase Cloud Firestore integration
+- README documentation
+- Vercel website deployment
+- GitHub collaborator: `kidlat14`
+- Submission before December 7, 2026
+- December 6, 2026 or earlier for full timeliness points
+
+---
+
+**LuxeStay — Bali Retreat**
+
+*Experience tropical elegance through smarter hotel management.*
+
+Powered by Python Flask, Firebase Cloud Firestore, and Vercel.
+
+© 2026 LuxeStay. Developed for educational purposes.
