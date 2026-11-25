@@ -6,7 +6,9 @@ LuxeStay is a modern, cloud-based hotel reservation and management system design
 
 ## Live Website
 
-**Vercel Deployment:** https://luxestay-chariz1.vercel.app/
+**Vercel Deployment:** [https://luxestay-bali.vercel.app/](https://luxestay-bali.vercel.app/)
+
+The website is intended to be accessible through desktop computers, laptops, tablets, and mobile devices without requiring a Vercel account.
 
 ## Technologies Used
 
@@ -106,7 +108,13 @@ http://127.0.0.1:5000/api/health
 
 The application is deployed using Vercel for online accessibility.
 
-**Deployment URL:** https://luxestay-chariz1.vercel.app/
+**Project Name:** LuxeStay
+
+**Hosting Platform:** Vercel
+
+**Production URL:** https://luxestay-bali.vercel.app/
+
+**Database:** Firebase Cloud Firestore
 
 Firebase authentication is configured through the Vercel environment variable `FIREBASE_SERVICE_ACCOUNT`, which contains the Firebase service account JSON credentials.
 
@@ -114,7 +122,7 @@ The application supports both local Firebase credential files and Vercel environ
 
 To check the deployed database connection, visit:
 
-https://luxestay-chariz1.vercel.app/api/health
+https://luxestay-bali.vercel.app/api/health
 
 ## REST API Endpoints
 
@@ -144,9 +152,9 @@ List endpoints support search and status filtering.
 
 ## Security and Privacy
 
-Firebase credentials are securely managed through local environment files or Vercel Environment Variables.
+Firebase credentials are managed through local environment files or Vercel Environment Variables.
 
-The following files must never be uploaded to GitHub:
+The following files and directories must be excluded from GitHub:
 
 - `ServiceAccountKey.json`
 - `.env`
@@ -156,7 +164,7 @@ The following files must never be uploaded to GitHub:
 
 Firestore security rules should deny direct client access. Database operations are performed through the Flask backend using the Firebase Admin SDK.
 
-This application is intended for academic demonstration purposes. The deployed version does not include complete user authentication and authorization. Use fictional guest records only. Production use requires additional security measures.
+This application is intended for academic demonstration purposes. The deployed version does not include complete user authentication and authorization. Visitors may be able to modify or delete database records. Use fictional guest records only. Production use requires additional security measures.
 
 ## System Testing
 
@@ -172,6 +180,7 @@ The following operations should be verified:
 - Linked-record deletion restrictions
 - Data persistence after refreshing the website
 - Local and Vercel application functionality
+- Website accessibility without Vercel login
 
 ## Project Limitations
 
